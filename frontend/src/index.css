@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+body {
+  @apply bg-slate-50 text-base text-slate-900 antialiased md:text-sm;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

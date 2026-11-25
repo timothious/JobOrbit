@@ -1,0 +1,1 @@
+export { useTabParam } from './useTabParam'
