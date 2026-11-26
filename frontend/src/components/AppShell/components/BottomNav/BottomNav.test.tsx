@@ -1,15 +1,11 @@
-import { cleanup, render, screen } from '@testing-library/react'
+import { cleanup, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router'
 import { afterEach, describe, expect, it } from 'vitest'
+import { renderWithProviders } from '@/test/utils'
 import { BottomNav } from './BottomNav'
 
 function renderAt(path: string) {
-  render(
-    <MemoryRouter initialEntries={[path]}>
-      <BottomNav />
-    </MemoryRouter>,
-  )
+  renderWithProviders(<BottomNav />, path)
   return screen.getByRole('button', { name: 'More' })
 }
 

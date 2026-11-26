@@ -1,6 +1,7 @@
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { LogOut, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink } from 'react-router'
+import { useLogout } from '@/api'
 import { primaryNav, secondaryNav } from '@/config/navigation'
 
 const STORAGE_KEY = 'joborbit.sidebarCollapsed'
@@ -15,6 +16,7 @@ function readCollapsed() {
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(readCollapsed)
+  const logout = useLogout()
 
   const toggle = () => {
     setCollapsed(!collapsed)
@@ -54,6 +56,15 @@ export function Sidebar() {
           </NavLink>
         ))}
       </nav>
+      <button
+        type="button"
+        onClick={() => logout.mutate()}
+        title={collapsed ? 'Sign out' : undefined}
+        className="mx-2 flex items-center gap-3 rounded-md px-2.5 py-2 text-sm text-slate-600 hover:bg-slate-100"
+      >
+        <LogOut size={18} strokeWidth={1.75} aria-hidden="true" />
+        {collapsed ? <span className="sr-only">Sign out</span> : 'Sign out'}
+      </button>
       <button
         type="button"
         onClick={toggle}

@@ -1,6 +1,7 @@
-import { Ellipsis } from 'lucide-react'
+import { Ellipsis, LogOut } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router'
+import { useLogout } from '@/api'
 import { findNavItem, primaryNav, secondaryNav } from '@/config/navigation'
 
 const itemClass = 'flex flex-1 flex-col items-center gap-0.5 py-2 text-xs font-medium'
@@ -8,6 +9,7 @@ const itemClass = 'flex flex-1 flex-col items-center gap-0.5 py-2 text-xs font-m
 export function BottomNav() {
   const { pathname } = useLocation()
   const [moreOpen, setMoreOpen] = useState(false)
+  const logout = useLogout()
   const navRef = useRef<HTMLElement>(null)
   const current = findNavItem(pathname)
   const moreActive = current !== undefined && secondaryNav.includes(current)
@@ -76,6 +78,16 @@ export function BottomNav() {
               </NavLink>
             </li>
           ))}
+          <li className="mt-1 border-t border-slate-100 pt-1">
+            <button
+              type="button"
+              onClick={() => logout.mutate()}
+              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-700 hover:bg-slate-100"
+            >
+              <LogOut size={18} strokeWidth={1.75} aria-hidden="true" />
+              Sign out
+            </button>
+          </li>
         </ul>
       )}
     </nav>

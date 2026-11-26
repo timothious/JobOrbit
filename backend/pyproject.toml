@@ -1,0 +1,51 @@
+[project]
+name = "joborbit"
+version = "0.1.0"
+description = "JobOrbit backend: personal job discovery and application tracking API"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.20.1",
+    "argon2-cffi>=25.1.0",
+    "fastapi>=0.115",
+    "psycopg[binary]>=3.3.9",
+    "pydantic-settings>=2.6",
+    "sqlalchemy>=2.0",
+    "tzdata>=2026.6",
+    "uvicorn>=0.32",
+]
+
+[project.scripts]
+joborbit = "cli:main"
+joborbit-api = "main_api:main"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.27",
+    "mypy>=1.13",
+    "pytest>=8.3",
+    "ruff>=0.8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+only-include = [
+    "app_settings", "auth", "catalog", "core", "ingestion", "user_profile",
+    "migrations", "alembic.ini", "cli.py", "main_api.py",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["E501"]  # line length is enforced by `ruff format`
+
+[tool.mypy]
+strict = true
+plugins = ["pydantic.mypy"]

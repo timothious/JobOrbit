@@ -1,7 +1,9 @@
-import { lazy } from 'react'
+import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router'
-import { AppShell } from '@/components'
+import { AppShell, RequireAuth } from '@/components'
 
+const LoginPage = lazy(() => import('@/pages/Login').then((m) => ({ default: m.LoginPage })))
+const SetupPage = lazy(() => import('@/pages/Setup').then((m) => ({ default: m.SetupPage })))
 const DashboardPage = lazy(() => import('@/pages/Dashboard').then((m) => ({ default: m.DashboardPage })))
 const JobsPage = lazy(() => import('@/pages/Jobs').then((m) => ({ default: m.JobsPage })))
 const JobDetailsPage = lazy(() => import('@/pages/JobDetails').then((m) => ({ default: m.JobDetailsPage })))
@@ -17,8 +19,17 @@ const NotFoundPage = lazy(() => import('@/pages/NotFound').then((m) => ({ defaul
 
 export default function App() {
   return (
-    <Routes>
-      <Route element={<AppShell />}>
+    <Suspense>
+      <Routes>
+      <Route path="login" element={<LoginPage />} />
+      <Route path="setup" element={<SetupPage />} />
+      <Route
+        element={
+          <RequireAuth>
+            <AppShell />
+          </RequireAuth>
+        }
+      >
         <Route index element={<DashboardPage />} />
         <Route path="jobs" element={<JobsPage />} />
         <Route path="jobs/:id" element={<JobDetailsPage />} />
@@ -35,5 +46,6 @@ export default function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
+    </Suspense>
   )
 }

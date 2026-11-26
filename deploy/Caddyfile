@@ -1,0 +1,7 @@
+# Example: HTTPS reverse proxy for JobOrbit (T1.10). Replace the domain with yours.
+# Caddy obtains and renews the TLS certificate automatically.
+# Run JobOrbit with JOBORBIT_HTTPS_TERMINATED=true so cookies are marked Secure.
+jobs.example.com {
+	encode gzip zstd
+	reverse_proxy 127.0.0.1:8765
+}

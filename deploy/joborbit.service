@@ -1,0 +1,22 @@
+# Example systemd unit (T1.10). Adjust User and paths, then:
+#   sudo cp deploy/joborbit.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now joborbit
+[Unit]
+Description=JobOrbit API
+After=network.target
+
+[Service]
+Type=simple
+User=joborbit
+WorkingDirectory=/opt/joborbit/backend
+EnvironmentFile=-/opt/joborbit/backend/.env
+ExecStartPre=/opt/joborbit/backend/.venv/bin/joborbit migrate
+ExecStart=/opt/joborbit/backend/.venv/bin/joborbit-api
+Restart=on-failure
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/opt/joborbit/backend/data
+
+[Install]
+WantedBy=multi-user.target
