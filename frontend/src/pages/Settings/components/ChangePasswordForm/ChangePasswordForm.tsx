@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { ApiError, useChangePassword } from '@/api'
 import { Button, Card, Field, Input } from '@/components'
+import { MIN_PASSWORD_LENGTH } from '@/config/password'
 import { toast } from '@/lib/toast'
 
 export function ChangePasswordForm() {
@@ -41,14 +42,14 @@ export function ChangePasswordForm() {
         <Field
           label="New password"
           htmlFor="new-password"
-          hint="At least 12 characters."
+          hint={`At least ${MIN_PASSWORD_LENGTH} characters.`}
           error={error('new_password')}
         >
           <Input
             id="new-password"
             type="password"
             autoComplete="new-password"
-            minLength={12}
+            minLength={MIN_PASSWORD_LENGTH}
             maxLength={128}
             required
             invalid={Boolean(error('new_password'))}

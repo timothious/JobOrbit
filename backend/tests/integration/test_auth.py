@@ -45,8 +45,8 @@ def test_setup_only_once(authed: TestClient) -> None:
 @pytest.mark.parametrize(
     ("body", "field"),
     [
-        ({"password": "short"}, "password"),
-        ({"password": " " * 12}, "password"),
+        ({"password": "short"}, "password"),  # 5 characters, below the minimum of 6
+        ({"password": " " * 6}, "password"),
         ({"password": PASSWORD, "timezone": "Mars/Base"}, "timezone"),
         (
             {"password": PASSWORD, "profile": {"citizenship_country_codes": ["pk"]}},
@@ -68,6 +68,10 @@ def test_setup_rejects_unknown_country_and_stays_incomplete(client: TestClient) 
     assert response.status_code == 422
     assert response.json()["error"]["details"][0]["code"] == "unknown_country"
     assert client.get(STATUS).json()["setup_complete"] is False
+
+
+def test_six_character_password_is_accepted(client: TestClient) -> None:
+    assert client.post("/api/v1/auth/setup", json={"password": "abc123"}).status_code == 201
 
 
 def test_login_requires_setup(client: TestClient) -> None:

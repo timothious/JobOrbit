@@ -8,7 +8,17 @@ eligibility intelligence. Single user, runs on your own machine. Specifications 
 
 - Python 3.12+ and [uv](https://docs.astral.sh/uv/)
 - Node.js 22+ and npm
-- Optional: Docker, for the PostgreSQL dev database
+- Optional: Docker, to run the whole app (or just PostgreSQL) in containers
+
+## Run with Docker (easiest)
+
+```bash
+docker compose up -d --build
+```
+
+Open http://127.0.0.1:8765 (Swagger UI at `/docs`) and complete the setup screen. This starts the
+app and PostgreSQL; migrations and reference data are applied automatically on start.
+Stop with `docker compose down` (data is kept in volumes; add `-v` to wipe it).
 
 ## Run locally (development)
 
@@ -46,7 +56,7 @@ data (SQLite database, logs) goes to `backend/data/` by default.
 ## PostgreSQL (optional)
 
 ```bash
-docker compose -f deploy/postgres.compose.yml up -d   # 127.0.0.1:55432, user/password/db: joborbit
+docker compose up -d db                                # 127.0.0.1:55432, user/password/db: joborbit
 export JOBORBIT_DATABASE_URL=postgresql+psycopg://joborbit:joborbit@127.0.0.1:55432/joborbit
 cd backend && uv run joborbit migrate
 ```
@@ -79,4 +89,5 @@ CI runs the same checks: [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 | `backend/migrations/` | Alembic migrations |
 | `frontend/src/components/` | Shared components (one folder each, with `index.ts`) |
 | `frontend/src/pages/` | One folder per page; page-only components in its `components/` |
-| `deploy/` | PostgreSQL compose file, Caddy and systemd examples |
+| `Dockerfile`, `docker-compose.yml` | Container image (API + built frontend) and the app + PostgreSQL stack |
+| `deploy/` | Caddy and systemd examples |

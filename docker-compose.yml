@@ -1,0 +1,39 @@
+# Run everything:   docker compose up -d --build     → http://127.0.0.1:8765 (Swagger: /docs)
+# Database only:    docker compose up -d db            (for running the API from source)
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: joborbit-db
+    environment:
+      POSTGRES_USER: joborbit
+      POSTGRES_PASSWORD: joborbit # local development only
+      POSTGRES_DB: joborbit
+    ports:
+      - "127.0.0.1:55432:5432" # host port 55432 avoids clashing with other local databases
+    volumes:
+      - joborbit-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U joborbit"]
+      interval: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: joborbit-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      JOBORBIT_DATABASE_URL: postgresql+psycopg://joborbit:joborbit@db:5432/joborbit
+      # The container listens on 0.0.0.0, but the port below is published on this machine only.
+      # Behind a TLS proxy, set JOBORBIT_HTTPS_TERMINATED=true instead.
+      JOBORBIT_ALLOW_INSECURE_HTTP: "true"
+    ports:
+      - "127.0.0.1:8765:8765"
+    volumes:
+      - joborbit-data:/app/backend/data
+    restart: unless-stopped
+
+volumes:
+  joborbit-pgdata:
+  joborbit-data:

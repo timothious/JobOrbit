@@ -8,7 +8,7 @@ from sqlalchemy import create_engine, inspect, text
 
 from cli import ALEMBIC_INI
 
-# Set to run the same checks on PostgreSQL, e.g. the dev database from deploy/postgres.compose.yml:
+# Set to run the same checks on PostgreSQL, e.g. the `db` service in docker-compose.yml:
 # postgresql+psycopg://joborbit:joborbit@127.0.0.1:55432/joborbit
 POSTGRES_URL = os.environ.get("JOBORBIT_TEST_POSTGRES_URL")
 

@@ -3,8 +3,8 @@ import { Navigate, useNavigate } from 'react-router'
 import { ApiError, useAuthStatus, useCountryOptions, useSetup } from '@/api'
 import { AuthLayout, Button, CountryMultiSelect, CountrySelect, Field, Input } from '@/components'
 import { exampleProfile } from '@/config/exampleProfile'
+import { MIN_PASSWORD_LENGTH } from '@/config/password'
 
-const MIN_PASSWORD = 12
 const FORM_FIELDS = ['password', 'profile.citizenship_country_codes', 'profile.residence_country_code', 'timezone']
 
 export function SetupPage() {
@@ -62,14 +62,14 @@ export function SetupPage() {
         <Field
           label="Password"
           htmlFor="password"
-          hint={`At least ${MIN_PASSWORD} characters.`}
+          hint={`At least ${MIN_PASSWORD_LENGTH} characters.`}
           error={fieldError('password')}
         >
           <Input
             id="password"
             type="password"
             autoComplete="new-password"
-            minLength={MIN_PASSWORD}
+            minLength={MIN_PASSWORD_LENGTH}
             maxLength={128}
             required
             value={password}

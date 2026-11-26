@@ -12,7 +12,10 @@ def _not_blank(value: str) -> str:
     return value
 
 
-Password = Annotated[str, Field(min_length=12, max_length=128), AfterValidator(_not_blank)]
+MIN_PASSWORD_LENGTH = 6
+Password = Annotated[
+    str, Field(min_length=MIN_PASSWORD_LENGTH, max_length=128), AfterValidator(_not_blank)
+]
 
 
 class SetupProfile(BaseModel):
